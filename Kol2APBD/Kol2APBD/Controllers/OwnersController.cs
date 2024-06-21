@@ -1,4 +1,5 @@
-﻿using Kol2APBD.DTOs;
+﻿using System.Transactions;
+using Kol2APBD.DTOs;
 using Kol2APBD.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -16,14 +17,14 @@ public class OwnersController : ControllerBase
 
 
     [HttpGet("{Id}")]
-    public async Task<IActionResult> GetOwnerData(int Id)
+    public async Task<IActionResult> GetOwnerData(int id)
     {
-        if (!await _dbService.DoesOwnerExist(Id))
+        if (!await _dbService.DoesOwnerExist(id))
         {
-            NotFound($"Owner wiht given id: {Id} does not exist");
+            NotFound($"Owner wiht given id: {id} does not exist");
         }
         
-        var Owner = await _dbService.GetOwnerData(Id);
+        var Owner = await _dbService.GetOwnerData(id);
 
         var result = new GetOwnerDataDTO()
         {
@@ -47,11 +48,18 @@ public class OwnersController : ControllerBase
     public async Task<IActionResult> AddOwnerWithObjects([FromBody] AddOwnerWithObjectsDTO addOwnerWithObjectsDto)
     {
 
+        if (!await _dbService.DoesObjectsExist(addOwnerWithObjectsDto.ObjectsIds))
+        {
+            return NotFound("One of given Objects Id does not exist");
+        }
 
+        using (var scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
+        {
+            await _dbService.AddOwnerWithObjects(addOwnerWithObjectsDto);
+            
+            scope.Complete();
+        }
 
-        await _dbService.AddOwnerWithObjects(addOwnerWithObjectsDto);
-        
-        
         return Created();
     }
 }

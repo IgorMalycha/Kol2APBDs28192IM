@@ -8,4 +8,5 @@ public interface IDbService
     Task<Owner> GetOwnerData(int id);
     Task<bool> DoesOwnerExist(int id);
     Task AddOwnerWithObjects(AddOwnerWithObjectsDTO addOwnerWithObjectsDto);
+    Task<bool> DoesObjectsExist(IEnumerable<int> objectsIds);
 }
