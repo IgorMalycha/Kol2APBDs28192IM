@@ -23,5 +23,5 @@ public class Object
     [ForeignKey(nameof(ObjectTypeId))]
     public ObjectType ObjectType { get; set; }
 
-    public ICollection<ObjectOwner> ObjectOwners { get; set; }
+    public ICollection<ObjectOwner> ObjectOwners { get; set; } = new HashSet<ObjectOwner>();
 }

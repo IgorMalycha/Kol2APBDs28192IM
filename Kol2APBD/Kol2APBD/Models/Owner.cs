@@ -13,5 +13,5 @@ public class Owner
     [MaxLength(9)]
     public string PhoneNumber { get; set; }
 
-    public ICollection<ObjectOwner> ObjectOwners { get; set; }
+    public ICollection<ObjectOwner> ObjectOwners { get; set; } = new HashSet<ObjectOwner>();
 }
