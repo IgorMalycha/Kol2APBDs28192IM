@@ -30,20 +30,18 @@ public class DbService : IDbService
         return await _context.Owners.AnyAsync(e => e.Id == id);
     }
 
-    public async Task AddOwnerWithObjects(AddOwnerWithObjectsDTO addOwnerWithObjectsDto)
+    public async Task AddOwnerWithObjects(AddOwnerWithObjectsRequestDTO addOwnerWithObjectsRequestDto)
     {
         
         Owner newOwner = new Owner()
         {
-            FirstName = addOwnerWithObjectsDto.FirstName,
-            LastName = addOwnerWithObjectsDto.LastName,
-            PhoneNumber = addOwnerWithObjectsDto.PhoneNumber,
+            FirstName = addOwnerWithObjectsRequestDto.FirstName,
+            LastName = addOwnerWithObjectsRequestDto.LastName,
+            PhoneNumber = addOwnerWithObjectsRequestDto.PhoneNumber,
         };
         
-        
-        var Objects = new List<Object>();
 
-        foreach (var id in addOwnerWithObjectsDto.ObjectsIds)
+        foreach (var id in addOwnerWithObjectsRequestDto.ObjectsIds)
         {
             _context.ObjectOwners.Add(new ObjectOwner()
             {
@@ -52,7 +50,7 @@ public class DbService : IDbService
             });
         }
 
-        _context.SaveChanges();
+        await _context.SaveChangesAsync();
     }
 
     public async Task<bool> DoesObjectsExist(IEnumerable<int> objectsIds)

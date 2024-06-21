@@ -24,14 +24,14 @@ public class OwnersController : ControllerBase
             NotFound($"Owner wiht given id: {id} does not exist");
         }
         
-        var Owner = await _dbService.GetOwnerData(id);
+        var owner = await _dbService.GetOwnerData(id);
 
         var result = new GetOwnerDataDTO()
         {
-            FirstName = Owner.FirstName,
-            LastName = Owner.LastName,
-            PhoneNumber = Owner.PhoneNumber,
-            OwnerObjectsDTO = Owner.ObjectOwners.Select(e => new OwnerObjectDTO()
+            FirstName = owner.FirstName,
+            LastName = owner.LastName,
+            PhoneNumber = owner.PhoneNumber,
+            OwnerObjectsDTO = owner.ObjectOwners.Select(e => new OwnerObjectDTO()
             {
                 Id = e.Object.Id,
                 Width = e.Object.Width,
@@ -45,7 +45,7 @@ public class OwnersController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<IActionResult> AddOwnerWithObjects([FromBody] AddOwnerWithObjectsDTO addOwnerWithObjectsDto)
+    public async Task<IActionResult> AddOwnerWithObjects([FromBody] AddOwnerWithObjectsRequestDTO addOwnerWithObjectsDto)
     {
 
         if (!await _dbService.DoesObjectsExist(addOwnerWithObjectsDto.ObjectsIds))
@@ -61,5 +61,6 @@ public class OwnersController : ControllerBase
         }
 
         return Created();
+        
     }
 }

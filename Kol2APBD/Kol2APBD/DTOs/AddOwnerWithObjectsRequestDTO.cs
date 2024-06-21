@@ -1,6 +1,6 @@
 ﻿namespace Kol2APBD.DTOs;
 
-public class AddOwnerWithObjectsDTO
+public class AddOwnerWithObjectsRequestDTO
 {
     public string FirstName { get; set; }
     
